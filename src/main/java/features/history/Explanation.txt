@@ -1,0 +1,15 @@
+//One thread is halfway through reading history.txt line by line,
+// and another thread starts writing a new message to the same file at the same time.
+// The reader could get a half-written line, or miss lines entirely, or in the worst case read
+// a corrupted entry because the writer was mid-write when the reader hit that part of the file.
+
+//ReentrantReadWriteLock. This is smarter than a simple lock — multiple threads
+//can READ at the same time (which is safe) but a WRITE blocks all other readers
+//and writers until it is done. This is better than locking everything because
+//most of the time clients are just reading recent history, not writing, so they
+//can all do that simultaneously without waiting.
+
+//Runs 200 writer threads each writing 50 messages, and 200 reader threads calling
+//getRecent(), all simultaneously. On UnsafeMessageHistory it consistently crashes
+//with ConcurrentModificationException. On SafeMessageHistory it consistently
+//passes because the ReadWriteLock prevents the unsafe concurrent access.

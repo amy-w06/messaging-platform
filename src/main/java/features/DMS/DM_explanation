@@ -1,0 +1,13 @@
+Our DirectMessageRouter uses ArrayList to store connected clients.
+This is not thread safe as if one thread is iterating over it while another removes or replaces a client, we get a classic race condition.
+DirectMessageRouter demonstrates this as it loops through the list ot find a user, during that loop another thread may remove or disconnect that user.
+This creates a time of check vs time of use bug where the router finds a client the no longer exists by the time it tries to send a message.
+
+DirectMessageRaceDemo creates two MockClient that mimic real clients but mark themselves disconnected when removed.
+The thread "Alice" spams /dm Bob while "Bob" repeatedly removes and re-adds themselves.
+If the unsafe router sends a stale reference, it prints [ERROR] DEAD CLIENT Bob, proving the race.
+
+DirectMessageRouterSafe wraps the entire look-up-and-send block inside a synchronised(clients) section.
+This gives mutual exclusion preventing the list from being modified while another thread is iterating over it.
+No concurrent modification, no race condition.
+

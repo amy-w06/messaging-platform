@@ -1,0 +1,21 @@
+How can friends fail without thread safety?
+    It can fail due to the fact that multiple threads can read and write shared data. Race conditions
+
+    Read-modify-write
+        If two users were to send a request to the same user at the same time, when they are writing to the same HashMap incomingRequests for the key of the user,
+        it can lead to one of the requests being overwritten
+
+    Check-then-act
+        If the receiving user doesn't have an item in incomingRequests both senders will try to create a new item overwriting one
+
+    When writing to the file if any of the maps are modified mid write the data will either be inaccurate or will cause a 'ConcurrentModificationException'
+
+How did I make this feature thread safe?
+        Using write locks ensures that when any of the maps are being modified no other thread can access it for either reading or writing
+        Using read locks ensures that when accessing data they are not currently being modified meaning that all the data is accurate
+        ConcurrentHashMaps for built-in safety
+
+    Read-modify-write and check-then-act
+        Full operations are wrapped in a write lock (mostly) so all updates will complete fully and uninterrupted
+    Writing to File
+        only happens when the function has the write lock so no inaccuracies with the writing

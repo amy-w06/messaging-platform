@@ -1,0 +1,14 @@
+
+How can an offline mailbox fail without thread safety?
+Offline Mailbox — Two people DM an offline user at the exact same time.
+Both threads check "does Bob have a mailbox?" — he doesn't.
+Both create a new list. One overwrites the other.
+ A message is lost. This is a check-then-act race condition.
+
+How did I make an offline mailbox safe?
+To make the offline mailbox safe, we had to solve the check-then-act race condition.
+One way we fixed it was by using computeIfAbsent, this ensures that only one thread creates
+the queue and that all other threads get the same queue. This means that no overwriting occurs.
+Another way we certified that our offline mailbox was thread safe was by using concurrent queues
+and concurrent hash maps. The concurrent queue allows many threads to add messages without altering
+the existing structure and the concurrent hashmaps allow for reads and writes without altering the map.
