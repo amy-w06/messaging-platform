@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS313 Chat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div id="username-modal">
+    <div id="username-box">
+        <div id="modal-brand">CS313</div>
+        <h2>Welcome</h2>
+        <p>Pick a username to start chatting</p>
+        <input type="text" id="username-input" placeholder="Your username..." maxlength="32" autocomplete="off"/>
+        <button id="username-submit">Start chatting</button>
+    </div>
+</div>
+
+<div id="app" class="hidden">
+
+    <!-- left panel: conversation list -->
+    <div id="left-panel">
+        <div id="left-header">
+            <div id="app-title">CS313 Chat</div>
+            <div id="user-badge">
+                <div id="user-avatar-badge"></div>
+                <span id="user-badge-name">—</span>
+            </div>
+        </div>
+
+        <div id="search-bar">
+            <input type="text" id="search-input" placeholder="Search conversations..." />
+        </div>
+
+        <div id="conversation-list">
+            <!-- general is always first -->
+            <div class="convo-item active" data-channel="general" onclick="switchChannel('general')">
+                <div class="convo-avatar convo-avatar-general">#</div>
+                <div class="convo-info">
+                    <div class="convo-name">general</div>
+                    <div class="convo-preview" id="preview-general">Start of conversation</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- new conversation button at the bottom -->
+        <div id="new-convo-area">
+            <button id="new-convo-btn" onclick="showCommandHelper()">+ New conversation</button>
+        </div>
+    </div>
+
+    <!-- right panel: active chat -->
+    <div id="right-panel">
+        <div id="chat-header">
+            <div id="chat-header-avatar"></div>
+            <div id="chat-header-info">
+                <div id="chat-header-name">general</div>
+                <div id="chat-header-sub">Group chat</div>
+            </div>
+            <div id="online-pill"><span id="online-count">0</span> online</div>
+        </div>
+
+        <div id="messages-container">
+            <div id="messages-list"></div>
+        </div>
+
+        <!-- command helper shown when user clicks new conversation -->
+        <div id="command-helper" class="hidden">
+            <div id="command-helper-title">Quick commands</div>
+            <div id="command-grid">
+                <button class="cmd-chip" onclick="fillCommand('/dm ')">Direct message</button>
+                <button class="cmd-chip" onclick="fillCommand('/createGC ')">Create group</button>
+                <button class="cmd-chip" onclick="fillCommand('/gc ')">Group message</button>
+                <button class="cmd-chip" onclick="fillCommand('/joinGC ')">Join group</button>
+                <button class="cmd-chip" onclick="fillCommand('/addFriend ')">Add friend</button>
+                <button class="cmd-chip" onclick="fillCommand('/acceptFriend ')">Accept friend</button>
+            </div>
+        </div>
+
+        <!-- command picker shown when user types / -->
+        <div id="command-picker" class="hidden">
+            <div id="command-list"></div>
+        </div>
+
+        <div id="input-area">
+            <textarea id="message-input" placeholder="Message general..." rows="1"></textarea>
+            <button id="send-btn">Send</button>
+        </div>
+    </div>
+
+</div>
+
+<div id="toast-container"></div>
+
+<script src="js/connect.js"></script>
+</body>
+</html>
